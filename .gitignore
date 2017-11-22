@@ -2,6 +2,7 @@
 ######################
 node_modules
 bower_components
+npm-debug.log.969512608
 
 # OS generated files #
 ######################
@@ -16,3 +17,4 @@ Thumbs.db
 # Sublime Text generated files #
 ######################
 sdk-sandbox.sublime-project
+sdk-sandbox.sublime-workspace
