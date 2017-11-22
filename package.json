@@ -1,0 +1,27 @@
+{
+  "name": "sdkfinence-sandbox",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "static-server .",
+    "lint": "eslint components/**/*.js",
+    "pug": "pug components/{**/**,**}/*.pug --no-debug --client --name-after-file --extension=pug.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hisaveliy/sdkfinance-sandbox.git"
+  },
+  "author": "SDK.finance",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hisaveliy/sdkfinance-sandbox/issues"
+  },
+  "homepage": "https://github.com/hisaveliy/sdkfinance-sandbox#readme",
+  "devDependencies": {
+    "eslint": "^4.10.0",
+    "eslint-config-airbnb": "^9.0.1",
+    "eslint-plugin-import": "^2.8.0",
+    "static-server": "^2.0.5"
+  }
+}
