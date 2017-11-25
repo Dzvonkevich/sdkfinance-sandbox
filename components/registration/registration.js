@@ -11,7 +11,7 @@ class Registration extends Component {
 
 		// fields of the form
 		this._fields  = {
-			name: `
+			login: `
 	            <div class="form-group">
 	                <input name="login" type="text" class="form-control" placeholder="Email or Phone" required="">
 	            </div>
@@ -38,7 +38,7 @@ class Registration extends Component {
 		this._html = `
 	        <h2>Registration</h2>
 	        <div class="registration__fields">
-				${this._fields.name}
+				${this._fields.login}
 				${this._fields.role}
 			</div>
             <button type="submit" class="btn btn-primary block full-width m-b">Submit</button>

@@ -2,6 +2,7 @@
 
 import Request from '../../modules/request/request';
 import Registration from '../registration/registration';
+import Authorization from '../authorization/authorization';
 
 class App {
 	constructor() {
@@ -15,6 +16,20 @@ class App {
 				this.asyn.request(
 					'POST', 
 					'https://emanat.sdk.finance/api/v1/registration',
+					data
+				)
+				.then(result => console.dir(result))
+				.catch(err => console.dir(err));
+			},
+		});
+
+		// init authorization
+		this.authorization = new Authorization({
+			el: document.getElementById('authorization'),
+			onSubmit: data => {
+				this.asyn.request(
+					'POST', 
+					'https://sandbox.sdk.finance/api/v1/authorization',
 					data
 				)
 				.then(result => console.dir(result))
