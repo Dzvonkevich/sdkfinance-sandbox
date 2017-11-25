@@ -1,8 +1,11 @@
 'use strict';
 
+import Request from '../modules/request/request';
+
 class Component {
 	constructor() {
-		// nothing
+		// init Promise
+		this.asyn = new Request();
 	}
 
 	render(html) {

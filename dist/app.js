@@ -68,11 +68,15 @@
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__modules_request_request__ = __webpack_require__(3);
+
+
 
 
 class Component {
 	constructor() {
-		// nothing
+		// init Promise
+		this.asyn = new __WEBPACK_IMPORTED_MODULE_0__modules_request_request__["a" /* default */]();
 	}
 
 	render(html) {
@@ -131,9 +135,9 @@ class Component {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__modules_request_request__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__registration_registration__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__authorization_authorization__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__registration_registration__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__authorization_authorization__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__create_issuer_create_issuer__ = __webpack_require__(5);
 
 
 
@@ -142,13 +146,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 class App {
 	constructor() {
-		// init Promise
-		this.asyn = new __WEBPACK_IMPORTED_MODULE_0__modules_request_request__["a" /* default */]();
-
 		// init registration
-		this.registration = new __WEBPACK_IMPORTED_MODULE_1__registration_registration__["a" /* default */]({
+		this.registration = new __WEBPACK_IMPORTED_MODULE_0__registration_registration__["a" /* default */]({
 			el: document.getElementById('registration'),
-			onSubmit: data => {
+			onSubmit: function (data) {
 				this.asyn.request(
 					'POST', 
 					'https://emanat.sdk.finance/api/v1/registration',
@@ -160,9 +161,9 @@ class App {
 		});
 
 		// init authorization
-		this.authorization = new __WEBPACK_IMPORTED_MODULE_2__authorization_authorization__["a" /* default */]({
+		this.authorization = new __WEBPACK_IMPORTED_MODULE_1__authorization_authorization__["a" /* default */]({
 			el: document.getElementById('authorization'),
-			onSubmit: data => {
+			onSubmit: function (data) {
 				this.asyn.request(
 					'POST', 
 					'https://sandbox.sdk.finance/api/v1/authorization',
@@ -172,6 +173,14 @@ class App {
 				.catch(err => console.dir(err));
 			},
 		});
+
+		// init create-issuer
+		this.createIssuer = new __WEBPACK_IMPORTED_MODULE_2__create_issuer_create_issuer__["a" /* default */]({
+			el: document.getElementById('create-issuer'),
+			onSubmit: function (data) {
+				console.log('Submitted');
+			},
+		});
 	}
 }
 
@@ -179,36 +188,6 @@ const app = new App();
 
 /***/ }),
 /* 2 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-class Request {
-	request(method, url, data) {
-		return new Promise((resolve, reject) => {
-			const xhr = new XMLHttpRequest();
-
-			xhr.addEventListener('load', () => {
-				if (xhr.status === 200) {
-					const result = JSON.parse(xhr.responseText);
-
-					resolve(result);
-				} else {
-					reject(xhr);
-				}
-			});
-			
-			xhr.open(method, url, true);
-
-			const dataJSON = data ? JSON.stringify(data) : null;
-			xhr.send(dataJSON);
-		});
-	}
-}
-
-/* harmony default export */ __webpack_exports__["a"] = (Request);
-
-/***/ }),
-/* 3 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -283,6 +262,43 @@ class Registration extends __WEBPACK_IMPORTED_MODULE_0__component__["a" /* defau
 /* harmony default export */ __webpack_exports__["a"] = (Registration);
 
 /***/ }),
+/* 3 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+class Request {
+	request(method, url, data, headers = {}) {
+		return new Promise((resolve, reject) => {
+			const xhr = new XMLHttpRequest();
+
+			xhr.addEventListener('load', () => {
+				if (xhr.status === 200) {
+					const result = JSON.parse(xhr.responseText);
+
+					resolve(result);
+				} else {
+					reject(xhr);
+				}
+			});
+			
+			xhr.open(method, url, true);
+
+			// set headers
+			if (headers.length) { 
+				for (const key in headers) {
+					xhr.setRequestHeader(key, headers[key]);
+				}
+			}
+
+			const dataJSON = data ? JSON.stringify(data) : null;
+			xhr.send(dataJSON);
+		});
+	}
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (Request);
+
+/***/ }),
 /* 4 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -330,6 +346,57 @@ class Authorization extends __WEBPACK_IMPORTED_MODULE_0__component__["a" /* defa
 }
 
 /* harmony default export */ __webpack_exports__["a"] = (Authorization);
+
+/***/ }),
+/* 5 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__component__ = __webpack_require__(0);
+
+
+
+
+class CreateIssuer extends __WEBPACK_IMPORTED_MODULE_0__component__["a" /* default */] {
+	constructor({el, onSubmit}) {
+		super();
+
+		this.el       = el;
+		this.onSubmit = onSubmit;
+
+		// fields of the form
+		this._fields  = {
+			name: `
+	            <div class="form-group">
+	                <input name="name" type="text" class="form-control" placeholder="Issuer name" required="">
+	            </div>
+	        `,
+			currency: `
+	            <div class="form-group">
+	                <select class="form-control m-b" name="currency">
+	                    <option value="usd">USD</option>
+	                    <option value="eur">EUR</option>
+	                </select>
+	            </div>
+			`,
+		};
+
+		// will be rendered
+		this._html = `
+	        <h2>Create Issuer</h2>
+	        <div>
+				${this._fields.name}
+				${this._fields.currency}
+			</div>
+            <button type="submit" class="btn btn-primary block full-width m-b">Submit</button>
+		`
+
+		// render component
+		this.el && this.render(this._html);
+	}
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (CreateIssuer);
 
 /***/ })
 /******/ ]);

@@ -1,5 +1,5 @@
 class Request {
-	request(method, url, data) {
+	request(method, url, data, headers = {}) {
 		return new Promise((resolve, reject) => {
 			const xhr = new XMLHttpRequest();
 
@@ -14,6 +14,13 @@ class Request {
 			});
 			
 			xhr.open(method, url, true);
+
+			// set headers
+			if (headers.length) { 
+				for (const key in headers) {
+					xhr.setRequestHeader(key, headers[key]);
+				}
+			}
 
 			const dataJSON = data ? JSON.stringify(data) : null;
 			xhr.send(dataJSON);
