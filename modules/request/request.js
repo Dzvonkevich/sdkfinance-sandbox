@@ -12,7 +12,7 @@ class Request {
 					reject(xhr);
 				}
 			});
-
+			
 			xhr.open(method, url, true);
 
 			const dataJSON = data ? JSON.stringify(data) : null;

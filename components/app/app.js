@@ -5,8 +5,10 @@ import Registration from '../registration/registration';
 
 class App {
 	constructor() {
+		// init Promise
 		this.asyn = new Request();
 
+		// init registration
 		this.registration = new Registration({
 			el: document.getElementById('registration'),
 			onSubmit: data => {

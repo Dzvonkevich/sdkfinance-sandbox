@@ -1,9 +1,15 @@
 'use strict';
 
-class Registration {
+import Component from '../component';
+
+class Registration extends Component {
 	constructor({el, onSubmit}) {
-		this.el       = el || document.getElementById('registration');
+		super();
+
+		this.el       = el;
 		this.onSubmit = onSubmit;
+
+		// fields of the form
 		this._fields  = {
 			name: `
 	            <div class="form-group">
@@ -28,39 +34,19 @@ class Registration {
 			`,
 		};
 
-		this._initEvents();
-		this.render();
-	}
-
-	render() {
-		this.el.innerHTML = `
+		// will be rendered
+		this._html = `
 	        <h2>Registration</h2>
-
 	        <div class="registration__fields">
 				${this._fields.name}
 				${this._fields.role}
 			</div>
-
             <button type="submit" class="btn btn-primary block full-width m-b">Submit</button>
             <p class="text-muted text-center"><small>Already have an account?</small> <a href="#"><small>Log in</small></a></p>
-		`;	
-	}
+		`
 
-	_initEvents() {
-		this.el.addEventListener('submit', this._onSubmit.bind(this));
-		this.el.addEventListener('change', this._onChange.bind(this));
-	}
-
-	_onSubmit(event) {
-		event.preventDefault();
-
-		const data = {};
-
-		this.el.querySelectorAll('input, select').forEach(element => {
-			data[element.name] = this.getField(element.name).value;
-		});
-
-		this.onSubmit && this.onSubmit(data);
+		// render component
+		this.el && this.render(this._html);
 	}
 
 	_onChange(event) {
@@ -76,22 +62,6 @@ class Registration {
 			else
 				this.el.querySelector('.registration__legal-type').remove();
 		}
-	}
-
-	getField(name) {
-		return this.el.querySelector(`[name="${name}"]`);
-	}
-
-	trigger(eventName, eventData) {
-		const event = new CustomEvent(eventName, {
-			detail: eventData,
-		});
-
-		this.el.dispatchEvent(event);
-	}
-
-	on(eventName, callback) {
-		this.el.addEventListener(eventName, callback);
 	}
 }
 

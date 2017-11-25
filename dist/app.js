@@ -78,8 +78,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 class App {
 	constructor() {
+		// init Promise
 		this.asyn = new __WEBPACK_IMPORTED_MODULE_0__modules_request_request__["a" /* default */]();
 
+		// init registration
 		this.registration = new __WEBPACK_IMPORTED_MODULE_1__registration_registration__["a" /* default */]({
 			el: document.getElementById('registration'),
 			onSubmit: data => {
@@ -116,7 +118,7 @@ class Request {
 					reject(xhr);
 				}
 			});
-
+			
 			xhr.open(method, url, true);
 
 			const dataJSON = data ? JSON.stringify(data) : null;
@@ -132,12 +134,19 @@ class Request {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__component__ = __webpack_require__(3);
 
 
-class Registration {
+
+
+class Registration extends __WEBPACK_IMPORTED_MODULE_0__component__["a" /* default */] {
 	constructor({el, onSubmit}) {
-		this.el       = el || document.getElementById('registration');
+		super();
+
+		this.el       = el;
 		this.onSubmit = onSubmit;
+
+		// fields of the form
 		this._fields  = {
 			name: `
 	            <div class="form-group">
@@ -162,39 +171,19 @@ class Registration {
 			`,
 		};
 
-		this._initEvents();
-		this.render();
-	}
-
-	render() {
-		this.el.innerHTML = `
+		// will be rendered
+		this._html = `
 	        <h2>Registration</h2>
-
 	        <div class="registration__fields">
 				${this._fields.name}
 				${this._fields.role}
 			</div>
-
             <button type="submit" class="btn btn-primary block full-width m-b">Submit</button>
             <p class="text-muted text-center"><small>Already have an account?</small> <a href="#"><small>Log in</small></a></p>
-		`;	
-	}
+		`
 
-	_initEvents() {
-		this.el.addEventListener('submit', this._onSubmit.bind(this));
-		this.el.addEventListener('change', this._onChange.bind(this));
-	}
-
-	_onSubmit(event) {
-		event.preventDefault();
-
-		const data = {};
-
-		this.el.querySelectorAll('input, select').forEach(element => {
-			data[element.name] = this.getField(element.name).value;
-		});
-
-		this.onSubmit && this.onSubmit(data);
+		// render component
+		this.el && this.render(this._html);
 	}
 
 	_onChange(event) {
@@ -210,6 +199,52 @@ class Registration {
 			else
 				this.el.querySelector('.registration__legal-type').remove();
 		}
+	}
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (Registration);
+
+/***/ }),
+/* 3 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+
+class Component {
+	constructor() {
+		// nothing
+	}
+
+	render(html) {
+		this._initEvents();
+		this.el.innerHTML = html;	
+	}
+
+	_initEvents() {
+		this.el.addEventListener('submit', this._onSubmit.bind(this));
+		this.el.addEventListener('change', this._onChange.bind(this));
+		this.el.addEventListener('click', this._onClick.bind(this));
+	}
+
+	_onSubmit(event) {
+		event.preventDefault();
+
+		const data = {};
+
+		this.el.querySelectorAll('input, select').forEach(element => {
+			data[element.name] = this.getField(element.name).value;
+		});
+
+		this.onSubmit && this.onSubmit(data);
+	}
+
+	_onChange(event) {
+		// nothing to default
+	}
+
+	_onClick(event) {
+		// nothing to default
 	}
 
 	getField(name) {
@@ -229,7 +264,7 @@ class Registration {
 	}
 }
 
-/* harmony default export */ __webpack_exports__["a"] = (Registration);
+/* harmony default export */ __webpack_exports__["a"] = (Component);
 
 /***/ })
 /******/ ]);
