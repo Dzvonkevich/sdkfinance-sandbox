@@ -15,7 +15,7 @@ class Request {
 			
 			xhr.open(method, url, true);
 
-			xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+			xhr.setRequestHeader('Content-Type', 'application/json');
 
 			const dataJSON = data ? JSON.stringify(data) : null;
 			xhr.send(dataJSON);
