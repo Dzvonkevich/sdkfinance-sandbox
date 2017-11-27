@@ -3,11 +3,12 @@
 import Component from '../component';
 
 class CreateIssuer extends Component {
-	constructor({el, onSubmit}) {
+	constructor({el, onSubmit, isRender = true}) {
 		super();
 
 		this.el       = el;
 		this.onSubmit = onSubmit;
+		this.onSubmit = isRender;
 
 		// fields of the form
 		this._fields  = {
@@ -37,7 +38,7 @@ class CreateIssuer extends Component {
 		`
 
 		// render component
-		this.el && this.render(this._html);
+		this.el && this.isRender && this.render(this._html);
 	}
 }
 

@@ -71,8 +71,6 @@
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__modules_request_request__ = __webpack_require__(3);
 
 
-
-
 class Component {
 	constructor() {
 		// init Promise
@@ -81,7 +79,7 @@ class Component {
 
 	render(html) {
 		this._initEvents();
-		this.el.innerHTML = html;	
+		this.el.innerHTML = html || this._html;	
 	}
 
 	_initEvents() {
@@ -136,8 +134,8 @@ class Component {
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__registration_registration__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__authorization_authorization__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__create_issuer_create_issuer__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__authorization_authorization__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__create_issuer_create_issuer__ = __webpack_require__(6);
 
 
 
@@ -150,14 +148,14 @@ class App {
 		this.registration = new __WEBPACK_IMPORTED_MODULE_0__registration_registration__["a" /* default */]({
 			el: document.getElementById('registration'),
 			onSubmit: function (data) {
-				this.asyn.request(
-					'POST', 
-					'https://sandbox.sdk.finance/api/v1/registration',
-					data
-				)
-				.then(result => console.dir(result))
+				this.asyn.request('POST', 'https://sandbox.sdk.finance/api/v1/registration', data)
+				.then(result => {
+					console.dir(result);
+
+					this.renderConfirmation();
+				})
 				.catch(err => console.dir(err));
-			},
+			}
 		});
 
 		// init authorization
@@ -171,7 +169,7 @@ class App {
 				)
 				.then(result => console.dir(result))
 				.catch(err => console.dir(err));
-			},
+			}
 		});
 
 		// init create-issuer
@@ -179,7 +177,7 @@ class App {
 			el: document.getElementById('create-issuer'),
 			onSubmit: function (data) {
 				console.log('Submitted');
-			},
+			}
 		});
 	}
 }
@@ -192,55 +190,56 @@ const app = new App();
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__component__ = __webpack_require__(0);
-
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__registration_confirm_registration_confirm__ = __webpack_require__(4);
 
 
 
 class Registration extends __WEBPACK_IMPORTED_MODULE_0__component__["a" /* default */] {
-	constructor({el, onSubmit}) {
+	constructor({el, onSubmit, isRender = true}) {
 		super();
 
 		this.el       = el;
 		this.onSubmit = onSubmit;
+		this.isRender = isRender;
 
 		// fields of the form
 		this._fields  = {
 			login: `
-	            <div class="form-group">
-	                <input name="login" type="text" class="form-control" placeholder="Email or Phone" required="">
-	            </div>
-	        `,
+        <div class="form-group">
+          <input name="login" type="text" class="form-control" placeholder="Email or Phone" required="">
+        </div>
+      `,
 			role: `
-	            <div class="form-group">
-	                <select class="form-control m-b" name="role">
-	                    <option value="individual">Individual</option>
-	                    <option value="merchant">Merchant</option>
-	                </select>
-	            </div>
+        <div class="form-group">
+          <select class="form-control m-b" name="role">
+            <option value="individual">Individual</option>
+            <option value="merchant">Merchant</option>
+          </select>
+        </div>
 			`,
 			legalType: `
-	            <div class="form-group registration__legal-type">
-	                <select class="form-control m-b" name="legalType">
-	                    <option value="individual">Individual person</option>
-	                    <option value="merchant">Corporation entity</option>
-	                </select>
-	            </div>
+        <div class="form-group registration__legal-type">
+          <select class="form-control m-b" name="legalType">
+            <option value="individual">Individual person</option>
+            <option value="merchant">Corporation entity</option>
+          </select>
+        </div>
 			`,
 		};
 
 		// will be rendered
 		this._html = `
-	        <h2>Registration</h2>
-	        <div class="registration__fields">
+      <h2>Registration</h2>
+      <div class="registration__fields">
 				${this._fields.login}
 				${this._fields.role}
 			</div>
-            <button type="submit" class="btn btn-primary block full-width m-b">Submit</button>
-            <p class="text-muted text-center"><small>Already have an account?</small> <a href="#"><small>Log in</small></a></p>
+      <button type="submit" class="btn btn-primary block full-width m-b">Submit</button>
+      <p class="text-muted text-center"><small>Already have an account?</small> <a href="#authorization"><small>Log in</small></a></p>
 		`
 
 		// render component
-		this.el && this.render(this._html);
+		this.el && this.isRender && this.render(this._html);
 	}
 
 	_onChange(event) {
@@ -256,6 +255,20 @@ class Registration extends __WEBPACK_IMPORTED_MODULE_0__component__["a" /* defau
 			else
 				this.el.querySelector('.registration__legal-type').remove();
 		}
+	}
+
+	renderConfirmation() {
+		const parentNode = this.el.parentNode;
+		parentNode.innerHTML = '<div id="registration-confirm"></div>';
+
+		const confirm = new __WEBPACK_IMPORTED_MODULE_1__registration_confirm_registration_confirm__["a" /* default */]({
+			el: document.getElementById('registration-confirm'),
+			onSubmit: function (data) {
+				this.asyn.request('POST', 'https://sandbox.sdk.finance/api/v1/registration/confirm', data)
+				.then(result => console.dir(result))
+				.catch(err => console.dir(err));
+			},
+		});
 	}
 }
 
@@ -301,14 +314,63 @@ class Request {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__component__ = __webpack_require__(0);
 
 
-
-
-class Authorization extends __WEBPACK_IMPORTED_MODULE_0__component__["a" /* default */] {
-	constructor({el, onSubmit}) {
+class RegistrationConfirm extends __WEBPACK_IMPORTED_MODULE_0__component__["a" /* default */] {
+	constructor({el, onSubmit, isRender = true}) {
 		super();
 
 		this.el       = el;
 		this.onSubmit = onSubmit;
+		this.isRender = isRender;
+
+		// fields of the form
+		this._fields  = {
+			login: `
+        <div class="form-group">
+          <input name="login" type="text" class="form-control" placeholder="Email or Phone" required="">
+        </div>
+      `,
+			otp: `
+        <div class="form-group">
+          <input name="otp" type="text" class="form-control" required="">
+        </div>
+			`,
+		};
+
+		// will be rendered
+		this._html = `
+      <h2>Registration Confirmation</h2>
+      <div>
+				${this._fields.login}
+				${this._fields.otp}
+			</div>
+      <button type="submit" class="btn btn-primary block full-width m-b">Submit</button>
+      <p class="text-muted text-center"><small>Already have an account?</small> <a href="#"><small>Log in</small></a></p>
+		`;
+
+		// render component
+		this.el && this.isRender && this.render(this._html);
+	}
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (RegistrationConfirm);
+
+/***/ }),
+/* 5 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__component__ = __webpack_require__(0);
+
+
+
+
+class Authorization extends __WEBPACK_IMPORTED_MODULE_0__component__["a" /* default */] {
+	constructor({el, onSubmit, isRender = true}) {
+		super();
+
+		this.el       = el;
+		this.onSubmit = onSubmit;
+		this.isRender = isRender;
 
 		// fields of the form
 		this._fields  = {
@@ -326,24 +388,24 @@ class Authorization extends __WEBPACK_IMPORTED_MODULE_0__component__["a" /* defa
 
 		// will be rendered
 		this._html = `
-	        <h2>Authorization</h2>
-	        <div>
+      <h2>Authorization</h2>
+      <div>
 				${this._fields.login}
 				${this._fields.password}
 			</div>
-            <button type="submit" class="btn btn-primary block full-width m-b">Submit</button>
-            <p class="text-muted text-center"><small>Don't have an account?</small> <a href="#"><small>Sign up</small></a></p>
+      <button type="submit" class="btn btn-primary block full-width m-b">Submit</button>
+      <p class="text-muted text-center"><small>Don't have an account?</small> <a href="#registration"><small>Sign up</small></a></p>
 		`
 
 		// render component
-		this.el && this.render(this._html);
+		this.el && isRender && this.render(this._html);
 	}
 }
 
 /* harmony default export */ __webpack_exports__["a"] = (Authorization);
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -353,11 +415,12 @@ class Authorization extends __WEBPACK_IMPORTED_MODULE_0__component__["a" /* defa
 
 
 class CreateIssuer extends __WEBPACK_IMPORTED_MODULE_0__component__["a" /* default */] {
-	constructor({el, onSubmit}) {
+	constructor({el, onSubmit, isRender = true}) {
 		super();
 
 		this.el       = el;
 		this.onSubmit = onSubmit;
+		this.onSubmit = isRender;
 
 		// fields of the form
 		this._fields  = {
@@ -387,7 +450,7 @@ class CreateIssuer extends __WEBPACK_IMPORTED_MODULE_0__component__["a" /* defau
 		`
 
 		// render component
-		this.el && this.render(this._html);
+		this.el && this.isRender && this.render(this._html);
 	}
 }
 

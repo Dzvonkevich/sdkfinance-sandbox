@@ -10,14 +10,14 @@ class App {
 		this.registration = new Registration({
 			el: document.getElementById('registration'),
 			onSubmit: function (data) {
-				this.asyn.request(
-					'POST', 
-					'https://sandbox.sdk.finance/api/v1/registration',
-					data
-				)
-				.then(result => console.dir(result))
+				this.asyn.request('POST', 'https://sandbox.sdk.finance/api/v1/registration', data)
+				.then(result => {
+					console.dir(result);
+
+					this.renderConfirmation();
+				})
 				.catch(err => console.dir(err));
-			},
+			}
 		});
 
 		// init authorization
@@ -31,7 +31,7 @@ class App {
 				)
 				.then(result => console.dir(result))
 				.catch(err => console.dir(err));
-			},
+			}
 		});
 
 		// init create-issuer
@@ -39,7 +39,7 @@ class App {
 			el: document.getElementById('create-issuer'),
 			onSubmit: function (data) {
 				console.log('Submitted');
-			},
+			}
 		});
 	}
 }

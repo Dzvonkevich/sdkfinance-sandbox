@@ -1,5 +1,3 @@
-'use strict';
-
 import Request from '../modules/request/request';
 
 class Component {
@@ -10,7 +8,7 @@ class Component {
 
 	render(html) {
 		this._initEvents();
-		this.el.innerHTML = html;	
+		this.el.innerHTML = html || this._html;	
 	}
 
 	_initEvents() {
