@@ -8,7 +8,7 @@ class CreateIssuer extends Component {
 
 		this.el       = el;
 		this.onSubmit = onSubmit;
-		this.onSubmit = isRender;
+		this.isRender = isRender;
 
 		// fields of the form
 		this._fields  = {
