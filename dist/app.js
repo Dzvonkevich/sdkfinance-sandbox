@@ -259,7 +259,7 @@ class Registration extends __WEBPACK_IMPORTED_MODULE_0__component__["a" /* defau
 
 	renderConfirmation() {
 		const parentNode = this.el.parentNode;
-		parentNode.innerHTML = '<div id="registration-confirm"></div>';
+		parentNode.innerHTML = '<form id="registration-confirm"></form>';
 
 		const confirm = new __WEBPACK_IMPORTED_MODULE_1__registration_confirm_registration_confirm__["a" /* default */]({
 			el: document.getElementById('registration-confirm'),

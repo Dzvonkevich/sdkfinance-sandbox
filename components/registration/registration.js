@@ -66,7 +66,7 @@ class Registration extends Component {
 
 	renderConfirmation() {
 		const parentNode = this.el.parentNode;
-		parentNode.innerHTML = '<div id="registration-confirm"></div>';
+		parentNode.innerHTML = '<form id="registration-confirm"></form>';
 
 		const confirm = new RegistrationConfirm({
 			el: document.getElementById('registration-confirm'),
