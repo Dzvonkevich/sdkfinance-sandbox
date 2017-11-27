@@ -152,7 +152,7 @@ class App {
 			onSubmit: function (data) {
 				this.asyn.request(
 					'POST', 
-					'https://emanat.sdk.finance/api/v1/registration',
+					'https://sandbox.sdk.finance/api/v1/registration',
 					data
 				)
 				.then(result => console.dir(result))
