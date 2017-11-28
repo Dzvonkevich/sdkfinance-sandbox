@@ -9,11 +9,17 @@ class App {
 		// init registration
 		this.registration = new Registration({
 			el: document.getElementById('registration'),
+
+			/**
+			 * Call the expression below when the form is clicked
+			 * @param data - an object of fields submitted through the form
+			 */ 
 			onSubmit: function (data) {
 				this.asyn.request('POST', 'https://sandbox.sdk.finance/api/v1/registration', data)
 				.then(result => {
 					console.dir(result);
 
+					// render confirmation form
 					this.renderConfirmation();
 				})
 				.catch(err => console.dir(err));
