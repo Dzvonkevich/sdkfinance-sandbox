@@ -1,3 +1,4 @@
+var app =
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -147,11 +148,17 @@ class App {
 		// init registration
 		this.registration = new __WEBPACK_IMPORTED_MODULE_0__registration_registration__["a" /* default */]({
 			el: document.getElementById('registration'),
+
+			/**
+			 * Call the expression below when the form is clicked
+			 * @param data - an object of fields submitted through the form
+			 */ 
 			onSubmit: function (data) {
 				this.asyn.request('POST', 'https://sandbox.sdk.finance/api/v1/registration', data)
 				.then(result => {
 					console.dir(result);
 
+					// render confirmation form
 					this.renderConfirmation();
 				})
 				.catch(err => console.dir(err));
@@ -420,33 +427,33 @@ class CreateIssuer extends __WEBPACK_IMPORTED_MODULE_0__component__["a" /* defau
 
 		this.el       = el;
 		this.onSubmit = onSubmit;
-		this.onSubmit = isRender;
+		this.isRender = isRender;
 
 		// fields of the form
 		this._fields  = {
 			name: `
-	            <div class="form-group">
-	                <input name="name" type="text" class="form-control" placeholder="Issuer name" required="">
-	            </div>
-	        `,
+        <div class="form-group">
+            <input name="name" type="text" class="form-control" placeholder="Issuer name" required="">
+        </div>
+      `,
 			currency: `
-	            <div class="form-group">
-	                <select class="form-control m-b" name="currency">
-	                    <option value="usd">USD</option>
-	                    <option value="eur">EUR</option>
-	                </select>
-	            </div>
+        <div class="form-group">
+          <select class="form-control m-b" name="currency">
+            <option value="usd">USD</option>
+            <option value="eur">EUR</option>
+          </select>
+        </div>
 			`,
 		};
 
 		// will be rendered
 		this._html = `
-	        <h2>Create Issuer</h2>
-	        <div>
-				${this._fields.name}
-				${this._fields.currency}
-			</div>
-            <button type="submit" class="btn btn-primary block full-width m-b">Submit</button>
+    <h2>Create Issuer</h2>
+    <div>
+			${this._fields.name}
+			${this._fields.currency}
+		</div>
+    <button type="submit" class="btn btn-primary block full-width m-b">Submit</button>
 		`
 
 		// render component
@@ -458,3 +465,4 @@ class CreateIssuer extends __WEBPACK_IMPORTED_MODULE_0__component__["a" /* defau
 
 /***/ })
 /******/ ]);
+//# sourceMappingURL=app.js.map
