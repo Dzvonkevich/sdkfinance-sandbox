@@ -1,11 +1,6 @@
 {
   "extends": "airbnb/base",
   "rules": {
-
-    // Эта настройка вынуждает использовать табы вместо пробелов
-    // Уберите её, если такой подход вас не устраиват :))
-    "indent": [2, "tab", {"SwitchCase": 1}],
-
     "eqeqeq": 0,
     "comma-dangle": [1, "always-multiline"],
     "quote-props": 0,
